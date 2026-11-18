@@ -35,8 +35,7 @@ Ada dua mode layanan:
 
 ### Alur Awal
 
-1. Customer membuka platform dan mencari UMKM/penjual di Surabaya berdasarkan kebutuhan.
-2. *(alur selanjutnya sedang difinalkan oleh Ananda)*
+di file "FLOW SANTARA"
 
 ### Masih Dibahas
 
@@ -77,7 +76,7 @@ Ada dua mode layanan:
 
 | Kapan | Pekerjaan | PJ | Status |
 |---|---|---|---|
-| Rab 18 Nov | Repo GitHub dan timeline jadi | Agus | ⬜ |
+| Rab 18 Nov | Repo GitHub dan timeline jadi | Huda | ⬜ |
 | Rab 18 Nov, malam | Tanya brand ambassador BRI (produk BRI) | *(TBD)* | ⬜ |
 | Rab 18 Nov, malam | Tanya anak UB (strategi lomba, tips pengerjaan, template) | *(TBD)* | ⬜ |
 | Rab 18 Nov, **23.59** | Template final terpilih | Huda, Fidel | ⬜ |
@@ -86,9 +85,9 @@ Ada dua mode layanan:
 | Kam 19 Nov, **18.00** | Alur / simulasi / website untuk lampiran mockup | Ananda | ⬜ |
 | Kam 19 Nov, malam | Layout ke dalam template dan ekspor PDF pertama | *(belum ditentukan)* | ⬜ |
 | Kam 19 Nov, malam | Review silang dengan checklist panduan | Semua | ⬜ |
-| Jum 20 Nov, pagi–siang | Revisi akhir, penamaan file, **submit Google Form** | *(TBD)* | ⬜ |
+| Jum 20 Nov, 18.00 | Revisi akhir, penamaan file, **submit Google Form** | *(TBD)* | ⬜ |
 
-Catatan: batas akhir pengumpulan adalah 20 November 2026. Jam penutupan Google Form belum diketahui, jadi submit lebih awal.
+Catatan: batas akhir pengumpulan adalah 20 November 2026. Jam penutupan Google Form di 23.59, jadi submit lebih awal.
 
 ---
 
