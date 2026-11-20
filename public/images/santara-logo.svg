@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 84" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="logoGradNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#002D62"/>
+      <stop offset="100%" stop-color="#001A38"/>
+    </linearGradient>
+    <linearGradient id="logoGradRoyal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00529C"/>
+      <stop offset="100%" stop-color="#003870"/>
+    </linearGradient>
+    <linearGradient id="logoGradCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="60%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#00529C"/>
+    </linearGradient>
+    <filter id="logoShadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#002D62" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <!-- Left: Stylized S-Monogram Icon (Combining Parexa + Flexy + Bipal + Project Spiro) -->
+  <g transform="translate(10, 6) scale(0.85)" filter="url(#logoShadow)">
+    <!-- Top Ribbon / Leaf / Flow (Cyan to Royal Blue) -->
+    <path d="M 24 34 
+             C 24 18, 38 10, 58 10 
+             C 80 10, 92 22, 92 40 
+             C 92 54, 82 63, 68 66 
+             C 56 68, 44 62, 40 52 
+             C 38 47, 42 41, 48 41 
+             C 53 41, 57 44, 59 49 
+             C 62 55, 70 57, 76 53 
+             C 81 49, 82 42, 80 36 
+             C 77 25, 68 19, 56 19 
+             C 42 19, 34 25, 34 34 
+             C 34 38, 30 42, 25 41 
+             C 24.3 40, 24 37, 24 34 Z" 
+          fill="url(#logoGradCyan)" />
+
+    <!-- Bottom Shield / Escrow Cradle (Deep Bank BRI Navy) -->
+    <path d="M 88 78 
+             C 88 94, 74 102, 54 102 
+             C 32 102, 20 90, 20 72 
+             C 20 58, 30 49, 44 46 
+             C 56 44, 68 50, 72 60 
+             C 74 65, 70 71, 64 71 
+             C 59 71, 55 68, 53 63 
+             C 50 57, 42 55, 36 59 
+             C 31 63, 30 70, 32 76 
+             C 35 87, 44 93, 56 93 
+             C 70 93, 78 87, 78 78 
+             C 78 74, 82 70, 87 71 
+             C 87.7 72, 88 75, 88 78 Z" 
+          fill="url(#logoGradNavy)" />
+
+    <!-- Center Escrow Trust Node (Holding Token) -->
+    <circle cx="56" cy="56" r="11" fill="url(#logoGradRoyal)" />
+    <circle cx="56" cy="56" r="5.5" fill="#FFFFFF" />
+    <circle cx="58" cy="54" r="2.2" fill="#38BDF8" />
+  </g>
+
+  <!-- Right: Modern Geometric Typography "santara" + Subtitle -->
+  <g transform="translate(112, 0)">
+    <!-- Primary Wordmark -->
+    <text x="0" y="47" 
+          font-family="system-ui, -apple-system, 'SF Pro Display', 'Google Sans', Montserrat, sans-serif" 
+          font-size="38" 
+          font-weight="900" 
+          letter-spacing="-0.04em" 
+          fill="#002D62">
+      santara
+    </text>
+    
+    <!-- Dot Accent (like Project Spiro cyan dot accent) -->
+    <circle cx="152" cy="41" r="4.5" fill="#0284C7" />
+
+    <!-- Institutional Subtitle -->
+    <text x="1" y="65" 
+          font-family="system-ui, -apple-system, 'SF Pro Text', 'Google Sans', sans-serif" 
+          font-size="9.5" 
+          font-weight="700" 
+          letter-spacing="0.16em" 
+          fill="#64748B">
+      SUPPLY CHAIN SYSTEM
+    </text>
+  </g>
+</svg>

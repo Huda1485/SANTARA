@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANTARA Web App — Portal Manajemen & Pengadaan UMKM Surabaya</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans (Style BudayaGo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            santara: {
+              blue: '#00529C',     // Signature BRI Blue
+              navy: '#0A2540',     // Deep Enterprise Navy ala BudayaGo
+              cyan: '#0284C7',     // Vibrant Tech Cyan
+              emerald: '#10B981',  // Food / Green Supply
+              amber: '#F59E0B',
+              surface: '#F8FAFC',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-santara-surface text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- ====================================================================== -->
+  <!-- TOP APP BAR WITH ROLE SWITCHER (Interactive Simulator) -->
+  <!-- ====================================================================== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand Logo & Back to Landing -->
+        <div class="flex items-center gap-3">
+          <a href="index.html" class="flex items-center gap-2 group">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-santara-blue to-santara-cyan flex items-center justify-center text-white shadow-sm">
+              <i data-lucide="layers" class="w-4 h-4"></i>
+            </div>
+            <span class="text-lg font-extrabold text-santara-navy tracking-tight">SANTARA<span class="text-santara-cyan">.ID</span></span>
+          </a>
+          <span class="hidden md:inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-50 text-santara-blue border border-sky-100">
+            Web App v1.0 • Surabaya Pilot
+          </span>
+        </div>
+
+        <!-- Role Simulator Switcher (Fitur Unggulan Buat Presentasi!) -->
+        <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-full border border-slate-200 text-xs font-bold overflow-x-auto custom-scrollbar max-w-md sm:max-w-none">
+          <button onclick="switchRole('umkm')" id="tab-umkm" class="role-btn px-3.5 py-1.5 rounded-full bg-white text-santara-navy shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap">
+            <i data-lucide="utensils" class="w-3.5 h-3.5 text-santara-blue"></i>
+            <span>UMKM Kuliner</span>
+          </button>
+          <button onclick="switchRole('customer')" id="tab-customer" class="role-btn px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1.5 whitespace-nowrap">
+            <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-santara-emerald"></i>
+            <span>Warga / Pembeli</span>
+          </button>
+          <button onclick="switchRole('supplier')" id="tab-supplier" class="role-btn px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1.5 whitespace-nowrap">
+            <i data-lucide="truck" class="w-3.5 h-3.5 text-santara-amber"></i>
+            <span>Supplier Pasar</span>
+          </button>
+          <button onclick="switchRole('pickup')" id="tab-pickup" class="role-btn px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1.5 whitespace-nowrap">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-600"></i>
+            <span>AgenBRILink (COD)</span>
+          </button>
+        </div>
+
+        <!-- User Profile Pill -->
+        <div class="flex items-center gap-3">
+          <div class="text-right hidden sm:block">
+            <div id="user-display-name" class="text-xs font-bold text-santara-navy">Warung Bu Sri (Mulyorejo)</div>
+            <div id="user-display-sub" class="text-[10px] text-santara-emerald font-semibold flex items-center justify-end gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-santara-emerald"></span>
+              Verified Merchant BRI
+            </div>
+          </div>
+          <div class="w-9 h-9 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-bold text-xs text-slate-600">
+            SR
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ====================================================================== -->
+  <!-- MAIN APP CONTAINER (Dynamic Role Views) -->
+  <!-- ====================================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ==================================================================== -->
+    <!-- VIEW 1: PORTAL UMKM KULINER (THE HUB) -->
+    <!-- ==================================================================== -->
+    <div id="view-umkm" class="role-view space-y-6">
+      
+      <!-- Top Overview Stats & BRI Rewards Mission -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        <!-- Saldo Kas BRImerchant -->
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Saldo Rekening BRI Simpedes</span>
+              <div class="text-2xl sm:text-3xl font-extrabold text-santara-navy mt-1">Rp 4.850.000</div>
+              <div class="text-xs text-santara-emerald font-semibold mt-1 flex items-center gap-1">
+                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                <span>+Rp 620.000 penjualan hari ini</span>
+              </div>
+            </div>
+            <div class="w-10 h-10 rounded-2xl bg-blue-50 text-santara-blue flex items-center justify-center">
+              <i data-lucide="wallet" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-slate-500">Tersinkron dengan <strong>BRImerchant</strong></span>
+            <span class="font-bold text-santara-blue">BO Surabaya Kaliasin</span>
+          </div>
+        </div>
+
+        <!-- Santara Rewards Progress (Voucher Anti-Bakar Duit) -->
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm md:col-span-2 relative overflow-hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+            <div>
+              <span class="text-xs font-bold text-santara-emerald uppercase tracking-wider bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100">
+                Santara Rewards • Juragan Aktif
+              </span>
+              <h4 class="text-base font-bold text-santara-navy mt-1">Misi Transaksi QRIS BRI Bulan Ini</h4>
+            </div>
+            <div class="text-xs font-bold text-santara-blue bg-sky-50 px-3 py-1 rounded-full border border-sky-100 self-start sm:self-auto">
+              24 / 30 Transaksi QRIS
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden p-0.5 border border-slate-200">
+              <div class="bg-gradient-to-r from-santara-blue to-santara-emerald h-full rounded-full transition-all" style="width: 80%"></div>
+            </div>
+            <div class="mt-2.5 flex items-center justify-between text-xs text-slate-500">
+              <span>Tinggal <strong>6 transaksi</strong> lagi untuk membuka:</span>
+              <span class="font-bold text-slate-700">🎁 Voucher Bebas Fee Kulakan + Gratis Ongkir Opang</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation Sub-Tabs in UMKM -->
+      <div class="flex items-center gap-3 border-b border-slate-200 pb-2">
+        <button onclick="switchUmkmTab('kulakan')" id="btn-sub-kulakan" class="px-4 py-2 rounded-xl text-sm font-bold bg-santara-navy text-white transition-all flex items-center gap-2">
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          <span>1. Kulakan Bahan Baku (Hulu)</span>
+        </button>
+        <button onclick="switchUmkmTab('ai')" id="btn-sub-ai" class="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4 text-purple-600"></i>
+          <span>2. Santara AI & Keuangan</span>
+        </button>
+        <button onclick="switchUmkmTab('jualan')" id="btn-sub-jualan" class="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:text-slate-900 transition-all flex items-center gap-2">
+          <i data-lucide="store" class="w-4 h-4 text-santara-emerald"></i>
+          <span>3. Jualan & Sync e-Peken (Hilir)</span>
+        </button>
+      </div>
+
+      <!-- SUB-TAB 1: KULAKAN BAHAN BAKU -->
+      <div id="sub-umkm-kulakan" class="space-y-6">
+        
+        <!-- Toggle Direct vs Group -->
+        <div class="p-6 rounded-3xl bg-white border border-slate-200">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="text-xl font-extrabold text-santara-navy">Katalog Bahan Pangan Surabaya</h3>
+              <p class="text-xs sm:text-sm text-slate-500">Pilih skema pengadaan sesuai kebutuhan operasional warungmu.</p>
+            </div>
+            <div class="inline-flex p-1 bg-slate-100 rounded-2xl border border-slate-200 text-xs font-bold">
+              <button onclick="setProcurementMode('group')" id="btn-mode-group" class="px-4 py-2 rounded-xl bg-white text-santara-navy shadow-sm transition-all flex items-center gap-1.5">
+                <i data-lucide="users" class="w-4 h-4 text-santara-emerald"></i>
+                <span>Santara Group (Grosir Patungan)</span>
+              </button>
+              <button onclick="setProcurementMode('direct')" id="btn-mode-direct" class="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1.5">
+                <i data-lucide="zap" class="w-4 h-4 text-santara-cyan"></i>
+                <span>Santara Direct (Lokal Cepat)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Grid -->
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
+            
+            <!-- Item 1: Daging Ayam -->
+            <div class="p-5 rounded-2xl border border-slate-200 hover:border-santara-cyan transition-all relative bg-santara-surface">
+              <div class="flex justify-between items-start">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-santara-emerald">Group Kuota: 400/500 kg</span>
+                <span class="text-xs font-bold text-slate-500">Kec. Mulyorejo</span>
+              </div>
+              <h5 class="text-base font-bold text-santara-navy mt-2">Daging Ayam Broiler Karkas</h5>
+              <div class="text-xs text-slate-500 mt-0.5">Supplier: <strong>Pengepul Unggas Krian</strong></div>
+              <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-xl font-extrabold text-santara-navy">Rp 33.000</span>
+                <span class="text-xs text-slate-400 line-through">Rp 36.500/kg</span>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
+                <span class="text-xs text-slate-600">Hemat <strong>Rp 3.500/kg</strong></span>
+                <button onclick="openProcureModal('Ayam Broiler', 33000, 50)" class="px-3.5 py-1.5 rounded-xl bg-santara-navy text-white text-xs font-bold hover:bg-slate-800 transition-all">
+                  Ikut Patungan
+                </button>
+              </div>
+            </div>
+
+            <!-- Item 2: Beras Premium -->
+            <div class="p-5 rounded-2xl border border-slate-200 hover:border-santara-cyan transition-all relative bg-santara-surface">
+              <div class="flex justify-between items-start">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-santara-emerald">Group Kuota: 850/1000 kg</span>
+                <span class="text-xs font-bold text-slate-500">Pasar Pucang</span>
+              </div>
+              <h5 class="text-base font-bold text-santara-navy mt-2">Beras Premium Ramos (50kg)</h5>
+              <div class="text-xs text-slate-500 mt-0.5">Supplier: <strong>Grosir Beras Barokah</strong></div>
+              <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-xl font-extrabold text-santara-navy">Rp 13.800</span>
+                <span class="text-xs text-slate-400 line-through">Rp 15.200/kg</span>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
+                <span class="text-xs text-slate-600">Hemat <strong>Rp 1.400/kg</strong></span>
+                <button onclick="openProcureModal('Beras Premium', 13800, 100)" class="px-3.5 py-1.5 rounded-xl bg-santara-navy text-white text-xs font-bold hover:bg-slate-800 transition-all">
+                  Ikut Patungan
+                </button>
+              </div>
+            </div>
+
+            <!-- Item 3: Cabai Rawit (Direct Mode) -->
+            <div class="p-5 rounded-2xl border border-slate-200 hover:border-santara-cyan transition-all relative bg-santara-surface">
+              <div class="flex justify-between items-start">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-100 text-santara-blue">Direct • Siap Kirim 30 Mnt</span>
+                <span class="text-xs font-bold text-slate-500">Pasar Keputran</span>
+              </div>
+              <h5 class="text-base font-bold text-santara-navy mt-2">Cabai Rawit Merah Super</h5>
+              <div class="text-xs text-slate-500 mt-0.5">Supplier: <strong>Stan Cak Mat Keputran</strong></div>
+              <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-xl font-extrabold text-santara-navy">Rp 38.000</span>
+                <span class="text-xs text-slate-500">/kg (Ready 15 kg)</span>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
+                <span class="text-xs text-slate-600">Kurir: <strong>Opang Keputran</strong></span>
+                <button onclick="openProcureModal('Cabai Rawit', 38000, 5)" class="px-3.5 py-1.5 rounded-xl bg-santara-blue text-white text-xs font-bold hover:bg-sky-700 transition-all">
+                  Beli Direct
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUB-TAB 2: SANTARA AI & KEUANGAN -->
+      <div id="sub-umkm-ai" class="hidden space-y-6">
+        
+        <!-- AI Insight Box -->
+        <div class="p-6 rounded-3xl bg-gradient-to-r from-purple-900 to-indigo-950 text-white relative overflow-hidden">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="bot" class="w-6 h-6 text-purple-300"></i>
+            </div>
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-purple-300 bg-purple-950/80 px-2.5 py-0.5 rounded-full border border-purple-800">
+                Santara AI Intelligence Report
+              </span>
+              <h4 class="text-xl font-bold mt-2">Analisis Performa Usaha & Pengadaan Mingguan</h4>
+              <p class="text-slate-300 text-sm mt-1 leading-relaxed">
+                "Halo Bu Sri! Penjualan minggu ini <strong>turun 12%</strong> dibanding minggu lalu, terutama di menu <em>Ayam Penyet Sambal Bawang</em>. Sementara itu, stok <strong>Beras diperkirakan habis 2 hari lagi</strong>. Manfaatkan kuota Santara Group beras di Pasar Pucang besok pagi untuk menghemat biaya operasional!"
+              </p>
+              
+              <!-- Direct Action Triggers -->
+              <div class="mt-5 flex flex-wrap gap-3">
+                <a href="https://linkumkm.id" target="_blank" class="px-4 py-2 rounded-xl text-xs font-bold bg-white text-purple-950 hover:bg-slate-100 transition-all flex items-center gap-1.5">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  <span>Pelajari Modul HPP di LinkUMKM BRI</span>
+                </a>
+                <button onclick="switchUmkmTab('kulakan')" class="px-4 py-2 rounded-xl text-xs font-bold bg-purple-800/60 border border-purple-700 hover:bg-purple-800 transition-all flex items-center gap-1.5">
+                  <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                  <span>Restock Beras via Santara Group</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="p-6 rounded-3xl bg-white border border-slate-200">
+            <h5 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Struktur Pengeluaran Bahan Baku Bulan Ini</h5>
+            <div class="mt-4 space-y-3 text-sm">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-600">Daging Ayam (280 kg)</span>
+                <span class="font-bold text-slate-800">Rp 9.240.000 (52%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-santara-blue h-full" style="width: 52%"></div>
+              </div>
+
+              <div class="flex justify-between items-center pt-2">
+                <span class="text-slate-600">Beras & Minyak Goreng</span>
+                <span class="font-bold text-slate-800">Rp 4.800.000 (27%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-santara-cyan h-full" style="width: 27%"></div>
+              </div>
+
+              <div class="flex justify-between items-center pt-2">
+                <span class="text-slate-600">Cabai & Bumbu Dapur</span>
+                <span class="font-bold text-slate-800">Rp 3.730.000 (21%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-santara-emerald h-full" style="width: 21%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-white border border-slate-200 flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-bold text-santara-blue uppercase tracking-wider bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+                Peluang Fasilitas KUR BRI
+              </span>
+              <h5 class="text-lg font-bold text-santara-navy mt-2">Digital Footprint Skor Kredit Tinggi</h5>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+                Warung Bu Sri memiliki <strong>3 bulan riwayat transaksi rutin</strong> tanpa putus di SANTARA. Data ini siap diexport sebagai dokumen pendukung pengajuan modal kerja <strong>KUR Mikro BRI</strong> hingga Rp 50 Juta.
+              </p>
+            </div>
+            <button onclick="alert('Permohonan informasi KUR diteruskan ke petugas Mantri BRI Unit Mulyorejo!')" class="mt-4 w-full py-2.5 rounded-xl text-xs font-bold bg-santara-blue text-white hover:bg-sky-800 transition-all">
+              Hubungi Mantri BRI Wilayah Surabaya
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUB-TAB 3: JUALAN & SYNC E-PEKEN -->
+      <div id="sub-umkm-jualan" class="hidden space-y-6">
+        
+        <div class="p-6 rounded-3xl bg-white border border-slate-200">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+            <div>
+              <h4 class="text-lg font-extrabold text-santara-navy">Etalase Hilir: Produk Warung Bu Sri</h4>
+              <p class="text-xs text-slate-500">Kelola menu siap saji dan produk sambal kemasan.</p>
+            </div>
+            <button onclick="alert('Katalog sukses disinkronkan ke portal e-Peken Surabaya!')" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition-all flex items-center gap-2">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>Sinkron ke e-Peken Surabaya</span>
+            </button>
+          </div>
+
+          <!-- Product Hilir List -->
+          <div class="mt-4 divide-y divide-slate-100 text-sm">
+            
+            <div class="py-3.5 flex items-center justify-between gap-4">
+              <div>
+                <div class="font-bold text-slate-800">Paket Ayam Penyet Sambal Bawang + Nasi</div>
+                <div class="text-xs text-slate-500">Makanan Siap Saji • Wajib Lunas QRIS (Tanpa COD)</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-extrabold text-santara-navy">Rp 22.000</span>
+                <button onclick="callCourier('#STR-204')" class="px-3 py-1.5 rounded-lg bg-santara-navy text-white text-xs font-bold hover:bg-slate-800">
+                  Panggil Si-Boyo Kurir
+                </button>
+              </div>
+            </div>
+
+            <div class="py-3.5 flex items-center justify-between gap-4">
+              <div>
+                <div class="font-bold text-slate-800">Sambal Bawang Kemasan Toples 150gr</div>
+                <div class="text-xs text-slate-500">Produk Kering/Kemasan • Bisa COD di AgenBRILink (Maks Rp150rb)</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-extrabold text-santara-navy">Rp 28.000</span>
+                <button onclick="callCourier('#STR-205')" class="px-3 py-1.5 rounded-lg bg-santara-navy text-white text-xs font-bold hover:bg-slate-800">
+                  Panggil Si-Boyo Kurir
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================================== -->
+    <!-- VIEW 2: PORTAL CUSTOMER / WARGA SURABAYA -->
+    <!-- ==================================================================== -->
+    <div id="view-customer" class="role-view hidden space-y-6">
+      
+      <!-- Banner Lokasi & Radius 3km -->
+      <div class="p-6 rounded-3xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold text-santara-cyan uppercase tracking-wider bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100">
+            Zona Hyperlocal
+          </span>
+          <h3 class="text-xl font-extrabold text-santara-navy mt-1">Belanja Produk UMKM Surabaya Timur</h3>
+          <p class="text-xs text-slate-500">Menampilkan penjual dalam radius 3 km dari lokasi Anda (Jl. Dharmawangsa).</p>
+        </div>
+        <div class="text-xs font-bold text-slate-600 bg-slate-100 px-4 py-2 rounded-xl flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-4 h-4 text-rose-500"></i>
+          <span>Pickup Point Utama: <strong>AgenBRILink Toko Berkah</strong></span>
+        </div>
+      </div>
+
+      <!-- Customer Product Catalog -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        
+        <!-- Card 1 -->
+        <div class="p-5 rounded-3xl bg-white border border-slate-200 hover:shadow-lg transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 border border-rose-100">Makanan Siap Saji (Prepaid QRIS)</span>
+              <span class="text-xs font-bold text-slate-400">800 m</span>
+            </div>
+            <h5 class="text-base font-bold text-santara-navy mt-2.5">Paket Nasi Ayam Penyet Sambal Bawang</h5>
+            <p class="text-xs text-slate-500 mt-1">Dari <strong>Warung Bu Sri (Mulyorejo)</strong></p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-lg font-extrabold text-santara-navy">Rp 22.000</span>
+            <button onclick="openCustomerCheckout('Ayam Penyet Bu Sri', 22000, 'prepaid')" class="px-4 py-2 rounded-xl bg-santara-navy text-white text-xs font-bold hover:bg-slate-800 transition-all flex items-center gap-1.5">
+              <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+              <span>Pesan & Ambil</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="p-5 rounded-3xl bg-white border border-slate-200 hover:shadow-lg transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-santara-emerald border border-emerald-100">Produk Kering (Bisa COD)</span>
+              <span class="text-xs font-bold text-slate-400">1.2 km</span>
+            </div>
+            <h5 class="text-base font-bold text-santara-navy mt-2.5">Sambal Bawang Kemasan Toples 150g</h5>
+            <p class="text-xs text-slate-500 mt-1">Dari <strong>Warung Bu Sri (Mulyorejo)</strong></p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-lg font-extrabold text-santara-navy">Rp 28.000</span>
+            <button onclick="openCustomerCheckout('Sambal Bawang Toples', 28000, 'cod')" class="px-4 py-2 rounded-xl bg-santara-blue text-white text-xs font-bold hover:bg-sky-800 transition-all flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+              <span>COD di AgenBRILink</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="p-5 rounded-3xl bg-white border border-slate-200 hover:shadow-lg transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-santara-emerald border border-emerald-100">Produk Kering (Bisa COD)</span>
+              <span class="text-xs font-bold text-slate-400">1.8 km</span>
+            </div>
+            <h5 class="text-base font-bold text-santara-navy mt-2.5">Keripik Singkong Renyah Rasa Balado 250g</h5>
+            <p class="text-xs text-slate-500 mt-1">Dari <strong>Camilan Surabaya Asri</strong></p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-lg font-extrabold text-santara-navy">Rp 18.000</span>
+            <button onclick="openCustomerCheckout('Keripik Singkong Balado', 18000, 'cod')" class="px-4 py-2 rounded-xl bg-santara-blue text-white text-xs font-bold hover:bg-sky-800 transition-all flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+              <span>COD di AgenBRILink</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================================== -->
+    <!-- VIEW 3: PORTAL SUPPLIER PASAR & DISTRIBUTOR -->
+    <!-- ==================================================================== -->
+    <div id="view-supplier" class="role-view hidden space-y-6">
+      
+      <div class="p-6 rounded-3xl bg-white border border-slate-200">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-xs font-bold text-amber-600 uppercase tracking-wider bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-100">
+              Supplier Portal • Stan Pasar Keputran
+            </span>
+            <h3 class="text-xl font-extrabold text-santara-navy mt-1">Kelola Pesanan Masuk & Stok Harian</h3>
+          </div>
+          <div class="text-xs text-slate-500">
+            Terhubung dengan: <strong>Pasar.id BRI & Rekening BRI Simpedes</strong>
+          </div>
+        </div>
+
+        <!-- Incoming Orders Table -->
+        <div class="mt-4 divide-y divide-slate-100 text-sm">
+          <div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span class="text-xs font-bold text-santara-blue bg-sky-50 px-2 py-0.5 rounded-full">Santara Direct • Butuh Cepat</span>
+              <div class="font-bold text-slate-800 mt-1">Pesanan: 30 kg Daging Ayam Broiler</div>
+              <div class="text-xs text-slate-500">Tujuan: Warung Bu Sri (Kec. Mulyorejo) • Batas Respon: <strong class="text-rose-600">18 Menit Lagi</strong></div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="alert('Pesanan dikonfirmasi! Notifikasi dikirimkan ke Ojek Pengkolan Pasar Keputran untuk penjemputan.')" class="px-4 py-2 rounded-xl bg-santara-emerald text-white text-xs font-bold hover:bg-emerald-700">
+                Sanggup Kirim (Rp 1.050.000)
+              </button>
+              <button onclick="alert('Pesanan dialihkan ke supplier lain.')" class="px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50">
+                Tolak
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================================== -->
+    <!-- VIEW 4: PORTAL PICKUP POINT (AGEN BRILink) -->
+    <!-- ==================================================================== -->
+    <div id="view-pickup" class="role-view hidden space-y-6">
+      
+      <div class="p-6 rounded-3xl bg-white border border-slate-200">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-xs font-bold text-rose-600 uppercase tracking-wider bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-100">
+              Lokasi Titik Jemput COD • AgenBRILink
+            </span>
+            <h3 class="text-xl font-extrabold text-santara-navy mt-1">Daftar Paket Titipan di Toko Berkah (Dharmawangsa)</h3>
+          </div>
+          <div class="text-xs text-slate-500 font-bold flex items-center gap-1.5 text-santara-emerald">
+            <span class="w-2 h-2 rounded-full bg-santara-emerald"></span>
+            Siap Layani Ambil COD
+          </div>
+        </div>
+
+        <!-- Packages on Desk -->
+        <div class="mt-4 divide-y divide-slate-100 text-sm">
+          
+          <div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-sky-100 text-santara-blue flex items-center justify-center font-extrabold text-xs flex-shrink-0">
+                #204
+              </div>
+              <div>
+                <div class="font-bold text-slate-800">Paket Ayam Penyet Bu Sri (#STR-204)</div>
+                <div class="text-xs text-slate-500">Penerima: Dimas • Status: <strong class="text-santara-emerald">Sudah Lunas QRIS di Awal</strong></div>
+                <div class="text-[11px] text-amber-600 font-semibold">Batas Ambil: Maks 2 Jam (Sebelum Dingin)</div>
+              </div>
+            </div>
+            <button onclick="releasePackage('STR-204', 'LUNAS')" class="px-4 py-2 rounded-xl bg-santara-navy text-white text-xs font-bold hover:bg-slate-800">
+              Serahkan Barang (Cek Kode #STR-204)
+            </button>
+          </div>
+
+          <div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-extrabold text-xs flex-shrink-0">
+                #205
+              </div>
+              <div>
+                <div class="font-bold text-slate-800">Sambal Bawang Toples (#STR-205)</div>
+                <div class="text-xs text-slate-500">Penerima: Rian • Status: <strong class="text-rose-600">Wajib Bayar COD Rp 28.000</strong></div>
+                <div class="text-[11px] text-slate-400">Diantar oleh: <strong>Si-Boyo Kurir Kelurahan</strong></div>
+              </div>
+            </div>
+            <button onclick="releasePackage('STR-205', 'COD')" class="px-4 py-2 rounded-xl bg-santara-blue text-white text-xs font-bold hover:bg-sky-800">
+              Terima Kasir COD (Rp 28.000)
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- ====================================================================== -->
+  <!-- MODAL 1: CHECKOUT & QRIS SIMULATOR -->
+  <!-- ====================================================================== -->
+  <div id="modal-checkout" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative">
+      <button onclick="closeModal('modal-checkout')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="text-center">
+        <div class="w-12 h-12 mx-auto rounded-full bg-blue-100 text-santara-blue flex items-center justify-center mb-3">
+          <i data-lucide="qr-code" class="w-6 h-6"></i>
+        </div>
+        <h4 class="text-xl font-bold text-santara-navy" id="modal-title">Pembayaran QRIS Dinamis BRI</h4>
+        <p class="text-xs text-slate-500 mt-1" id="modal-desc">Scan menggunakan aplikasi BRImo</p>
+      </div>
+
+      <!-- Dummy QR Display -->
+      <div class="my-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 text-center">
+        <div class="w-48 h-48 mx-auto bg-white border border-slate-300 rounded-xl p-2 flex items-center justify-center shadow-inner">
+          <!-- Stylized QR placeholder -->
+          <div class="w-full h-full border-4 border-slate-900 border-dashed rounded-lg flex flex-col items-center justify-center">
+            <i data-lucide="qr-code" class="w-16 h-16 text-santara-navy"></i>
+            <span class="text-[10px] font-bold text-slate-400 mt-1">QRIS BRI DYNAMIC</span>
+          </div>
+        </div>
+        <div class="mt-3 text-lg font-extrabold text-santara-navy" id="modal-price">Rp 33.000</div>
+        <div class="text-[11px] text-santara-emerald font-semibold flex items-center justify-center gap-1 mt-0.5">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+          <span>Dana Ditahan Aman (Settlement Hold)</span>
+        </div>
+      </div>
+
+      <!-- Action Button to Simulate Payment Success -->
+      <button onclick="simulatePaymentSuccess()" class="w-full py-3 rounded-full bg-gradient-to-r from-santara-blue to-santara-cyan text-white font-bold text-sm shadow-md hover:shadow-lg transition-all">
+        Simulasi Bayar via BRImo (Sukses)
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ====================================================================== -->
+  <!-- MODAL 2: TIKET DIGITAL REPASS / KODE AMBIL -->
+  <!-- ====================================================================== -->
+  <div id="modal-ticket" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl relative text-center">
+      <div class="w-12 h-12 mx-auto rounded-full bg-emerald-100 text-santara-emerald flex items-center justify-center mb-3">
+        <i data-lucide="check" class="w-6 h-6"></i>
+      </div>
+      <h4 class="text-xl font-bold text-santara-navy">Pesanan Berhasil!</h4>
+      <p class="text-xs text-slate-500 mt-1">Tunjukkan kode ini saat mengambil barang di AgenBRILink</p>
+
+      <div class="my-6 p-6 rounded-2xl bg-santara-surface border-2 border-dashed border-santara-blue/30">
+        <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">KODE PENGAMBILAN</div>
+        <div class="text-4xl font-extrabold text-santara-navy mt-1 tracking-wider" id="ticket-code">#STR-204</div>
+        <div class="text-xs text-santara-emerald font-semibold mt-2">Lokasi: AgenBRILink Toko Berkah</div>
+      </div>
+
+      <button onclick="closeModal('modal-ticket')" class="w-full py-2.5 rounded-full bg-santara-navy text-white font-bold text-xs hover:bg-slate-800 transition-all">
+        Tutup & Simpan Tiket
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ====================================================================== -->
+  <!-- SCRIPT LOGIC (Interactive Prototype) -->
+  <!-- ====================================================================== -->
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // Role Switcher Logic
+    function switchRole(role) {
+      document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-santara-navy', 'shadow-sm');
+        btn.classList.add('text-slate-600');
+      });
+
+      const activeView = document.getElementById(`view-${role}`);
+      const activeBtn = document.getElementById(`tab-${role}`);
+      if (activeView) activeView.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-santara-navy', 'shadow-sm');
+        activeBtn.classList.remove('text-slate-600');
+      }
+
+      // Update User Header Info
+      const nameEl = document.getElementById('user-display-name');
+      const subEl = document.getElementById('user-display-sub');
+
+      if (role === 'umkm') {
+        nameEl.innerText = 'Warung Bu Sri (Mulyorejo)';
+        subEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-santara-emerald"></span> Verified Merchant BRI';
+      } else if (role === 'customer') {
+        nameEl.innerText = 'Dimas (Warga Surabaya)';
+        subEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-santara-cyan"></span> Pembeli Terverifikasi OTP';
+      } else if (role === 'supplier') {
+        nameEl.innerText = 'Stan Cak Mat (Pasar Keputran)';
+        subEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Mitra Pasar.id BRI';
+      } else if (role === 'pickup') {
+        nameEl.innerText = 'Toko Berkah (Kel. Dharmawangsa)';
+        subEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> AgenBRILink Resmi';
+      }
+
+      lucide.createIcons();
+    }
+
+    // Sub-Tabs in UMKM Portal
+    function switchUmkmTab(tab) {
+      ['kulakan', 'ai', 'jualan'].forEach(t => {
+        document.getElementById(`sub-umkm-${t}`).classList.add('hidden');
+        document.getElementById(`btn-sub-${t}`).classList.remove('bg-santara-navy', 'text-white');
+        document.getElementById(`btn-sub-${t}`).classList.add('text-slate-600');
+      });
+
+      document.getElementById(`sub-umkm-${tab}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`btn-sub-${tab}`);
+      activeBtn.classList.add('bg-santara-navy', 'text-white');
+      activeBtn.classList.remove('text-slate-600');
+      lucide.createIcons();
+    }
+
+    // Procurement Mode Toggle
+    function setProcurementMode(mode) {
+      const btnGroup = document.getElementById('btn-mode-group');
+      const btnDirect = document.getElementById('btn-mode-direct');
+      if (mode === 'group') {
+        btnGroup.classList.add('bg-white', 'text-santara-navy', 'shadow-sm');
+        btnGroup.classList.remove('text-slate-600');
+        btnDirect.classList.remove('bg-white', 'text-santara-navy', 'shadow-sm');
+        btnDirect.classList.add('text-slate-600');
+      } else {
+        btnDirect.classList.add('bg-white', 'text-santara-navy', 'shadow-sm');
+        btnDirect.classList.remove('text-slate-600');
+        btnGroup.classList.remove('bg-white', 'text-santara-navy', 'shadow-sm');
+        btnGroup.classList.add('text-slate-600');
+      }
+    }
+
+    // Modals
+    function openProcureModal(item, price, qty) {
+      document.getElementById('modal-title').innerText = `Kulakan: ${item}`;
+      document.getElementById('modal-desc').innerText = `Pesanan ${qty} kg • Dana ditahan sampai barang dicek`;
+      document.getElementById('modal-price').innerText = `Rp ${(price * qty).toLocaleString('id-ID')}`;
+      document.getElementById('modal-checkout').classList.remove('hidden');
+    }
+
+    function openCustomerCheckout(item, price, mode) {
+      if (mode === 'cod') {
+        document.getElementById('ticket-code').innerText = '#STR-205';
+        document.getElementById('modal-ticket').classList.remove('hidden');
+      } else {
+        document.getElementById('modal-title').innerText = `Bayar: ${item}`;
+        document.getElementById('modal-desc').innerText = 'Makanan Siap Saji • Wajib Lunas QRIS';
+        document.getElementById('modal-price').innerText = `Rp ${price.toLocaleString('id-ID')}`;
+        document.getElementById('modal-checkout').classList.remove('hidden');
+      }
+    }
+
+    function simulatePaymentSuccess() {
+      document.getElementById('modal-checkout').classList.add('hidden');
+      document.getElementById('ticket-code').innerText = '#STR-204';
+      document.getElementById('modal-ticket').classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function releasePackage(code, status) {
+      if (status === 'COD') {
+        alert(`Paket ${code} lunas COD Rp 28.000 diterima di AgenBRILink! Dana langsung diteruskan ke rekening BRI penjual.`);
+      } else {
+        alert(`Paket ${code} sudah lunas di awal! Barang diserahkan ke pembeli dalam 5 detik.`);
+      }
+    }
+
+    function callCourier(code) {
+      alert(`Panggilan dikirimkan ke Si-Boyo Kurir & Ojek Pengkolan Kelurahan terdekat untuk menjemput paket ${code}!`);
+    }
+  </script>
+
+</body>
+</html>

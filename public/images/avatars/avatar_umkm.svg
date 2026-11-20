@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <circle cx="60" cy="60" r="58" fill="#FFE4E6" stroke="#FDA4AF" stroke-width="4"/>
+  <circle cx="60" cy="48" r="28" fill="#334155"/>
+  <circle cx="60" cy="48" r="23" fill="#FDE68A"/>
+  <path d="M36 40C42 26 78 26 84 40C86 45 86 36 84 32C78 20 42 20 36 32C34 36 34 45 36 40Z" fill="#E11D48"/>
+  <circle cx="82" cy="34" r="6" fill="#FB7185"/>
+  <circle cx="51" cy="47" r="3" fill="#0F172A"/>
+  <circle cx="69" cy="47" r="3" fill="#0F172A"/>
+  <path d="M48 43L46 41M72 43L74 41" stroke="#0F172A" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="44" cy="52" r="5" fill="#FB7185" opacity="0.5"/>
+  <circle cx="76" cy="52" r="5" fill="#FB7185" opacity="0.5"/>
+  <path d="M52 54C56 61 64 61 68 54" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" fill="#FFFFFF"/>
+  <path d="M28 104C28 86 42 75 60 75C78 75 92 86 92 104C92 114 28 114 28 104Z" fill="#F43F5E"/>
+  <path d="M46 76H74V108H46V76Z" fill="#FFF1F2"/>
+  <path d="M53 84H67" stroke="#F43F5E" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
